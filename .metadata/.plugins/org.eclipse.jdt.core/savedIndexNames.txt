@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+/root/workspace/student/javaee/.metadata/.plugins/org.eclipse.jdt.core
+2894309355.index
+1930023930.index
+1372303221.index

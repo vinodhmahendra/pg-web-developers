@@ -1,0 +1,5 @@
+package com.simplilearn.workshop.util;
+
+public class DatabaseConnection {
+
+}

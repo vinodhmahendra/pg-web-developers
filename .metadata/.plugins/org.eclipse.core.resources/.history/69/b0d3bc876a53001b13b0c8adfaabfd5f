@@ -1,0 +1,67 @@
+package com.simplilearn.workshop;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.simplilearn.workshop.util.DatabaseConnection;
+
+public class ProductDetails extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static final String INSERT_QUERY = "INSERT INTO eproduct(NAME,PRICE) value ('mac pro',150000)";
+	private static final String SELECT_QUERY = "SELECT * FROM eproduct";
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		try {
+
+			PrintWriter out = response.getWriter();
+			out.println("<html> <body>");
+			InputStream inputStream = getServletContext().getResourceAsStream(
+					"/WEB-INF/application.properties");
+
+			Properties properties = new Properties();
+			properties.load(inputStream);
+			// obtain a connection object
+			DatabaseConnection connection = new DatabaseConnection(
+					properties.getProperty("url"),
+					properties.getProperty("user"),
+					properties.getProperty("password"));
+			// obtain a Statement Object
+			Statement statement = connection.getConnection().createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			
+			statement.executeUpdate(INSERT_QUERY);
+			
+			ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
+			
+			while (resultSet.next()){
+				out.println(resultSet.getInt("ID") + " ," + resultSet.getString("NAME") + "<br/>");
+			}
+
+			out.println("</html> </body>");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

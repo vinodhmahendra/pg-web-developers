@@ -1,0 +1,4 @@
+#  jdbc connection properties to mysql database
+url=
+user=
+password=
